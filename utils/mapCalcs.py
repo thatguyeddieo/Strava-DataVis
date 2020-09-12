@@ -52,23 +52,25 @@ def get_center(loc_data,coord,coord_keys,conversion=None):
         return [np.nan,np.nan]
 
     if isinstance(coord,range):
-        strt, end = coord[0], coord[1]
+        print(coord)
+        strt, end = coord[0], coord[-1]
         coords = slice(strt,end)
     elif isinstance(coord,int):
-        coords = coord
+        strt, end = coord, coord+1
+        coords = slice(strt,end)
     else:
         print('Error Message')
         return None
-    
+
     act_parms = loc_data['activities']
-    coords_array0 = [act_parms[a][coord_keys[0]][coords]
+    coords_array0 = [list(act_parms[a][coord_keys[0]][coords])
                      for a in act_parms.keys()
-                     if coord < len(act_parms[a][coord_keys[0]])]
-    coords_array1 = [act_parms[a][coord_keys[1]][coords]
+                     if end < len(act_parms[a][coord_keys[0]])]
+    coords_array1 = [list(act_parms[a][coord_keys[1]][coords])
                      for a in act_parms.keys()
-                     if coord < len(act_parms[a][coord_keys[1]])]
-                        
-    center_coords = np.mean([coords_array0,coords_array1],axis=1)
+                     if end < len(act_parms[a][coord_keys[1]])]
+
+    center_coords = np.mean([sum(coords_array0,[]),sum(coords_array1,[])],axis=1)
 
     if isinstance(conversion,str): 
         return convert.units(conversion,center_coords)
@@ -215,7 +217,7 @@ def get_SW_point(scale,center_pxs,widxhght):
 
     return sw_lng,sw_lat
 
-def get_NE_point(scale,center_pxs,widxhght,mercator_len):
+def get_NE_point(scale,center_pxs,widxhght):
     """
     Parameters:
     -----------

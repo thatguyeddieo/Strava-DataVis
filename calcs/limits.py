@@ -28,6 +28,8 @@ def check_bounds(d,min_val,max_val):
     """
 
     if isinstance(d,(list,np.ndarray)):
+        if isinstance(d[0],np.ndarray):
+            d = np.concatenate(d).ravel()
         res_bool = np.logical_or(d < min_val, d > max_val)
         res = sum(res_bool)
 

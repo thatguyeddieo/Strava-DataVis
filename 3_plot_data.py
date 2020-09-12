@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from calcs import convert
 from utils import mapCalcs
-from utils import MapPro
+from calcs import limits
 
 import importlib 
 importlib.reload(formats)
 importlib.reload(mapCalcs)
-importlib.reload(MapPro)
 importlib.reload(convert)
+importlib.reload(limits)
 
 # load dateset from folder
 read_dir = "Interpolated_Dataset"
@@ -51,20 +51,30 @@ fig, ax = plt.subplots(figsize=(10,10))
 
 zoom = 12
 map_width,map_height = 500,500
-for a in range(0,10000,1000):
-    map_center = mapCalcs.get_center(strava_data,a,['long_intrp','lat_intrp'])
+colors = iter(['red','black','blue','green','yellow']*100)
+for a in range(5,7000,500):
+    color = next(colors)
+    map_center = mapCalcs.get_center(strava_data,range(0,a),['long_intrp','lat_intrp'])
+    print(map_center)
     lat_max, long_max, lat_min, long_min = mapCalcs.get_corners(zoom,map_center,[map_width,map_height],
                 in_coord_units='semi',out_coord_units='semi')
     # ax.plot([long_min_semi,lat_min_semi],[long_min_semi,lat_max_semi])
-    ax.plot([long_min,long_min],[lat_min,lat_max],color='black')
-    ax.plot([long_min,long_max],[lat_max,lat_max],color='black')
-    ax.plot([long_min,long_max],[lat_min,lat_min],color='black')
-    ax.plot([long_max,long_max],[lat_min,lat_max],color='black')
-    # ax.plot([long_max_semi,lat_min_semi],[long_max_semi,lat_max_semi])
-    # ax.plot([long_min_semi,lat_max_semi],[long_max_semi,lat_max_semi])
-    # ax.plot([long_min_semi,lat_min_semi],[long_max_semi,lat_min_semi])
+    ax.plot([long_min,long_min],[lat_min,lat_max],color=color)
+    ax.plot([long_min,long_max],[lat_max,lat_max],color=color)
+    ax.plot([long_min,long_max],[lat_min,lat_min],color=color)
+    ax.plot([long_max,long_max],[lat_min,lat_max],color=color)
+    ax.scatter(map_center[0],map_center[1],c=color,s=100)
+    long = [strava_data['activities'][i]['long_intrp'][:a] for i in strava_data['activities'].keys()]
+    late = [strava_data['activities'][i]['lat_intrp'][:a]  for i in strava_data['activities'].keys()]
 
-    ax.scatter(map_center[0],map_center[1])
+    print('long: ',long)
+    print('lat: ',late)
+    print('long_min: ',long_min)
+    print('long_max: ',long_max)
+    ax.scatter(long,late,c=color)
+    chk_bounds = limits.check_bounds(long,long_min,long_max)
+    if chk_bounds == False:
+        break
 
 plt.show()
 
