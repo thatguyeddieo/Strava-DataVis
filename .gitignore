@@ -1,2 +1,3 @@
 *.DS_Store
-fitgz_files
+datasets/
+maps_n_gifs_dev/
