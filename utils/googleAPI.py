@@ -10,6 +10,8 @@ def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
     -----------
     zm: int
         Zoom level of the region desired
+          * Max = 20
+          * Min = 1
 
     sc: int
         Scale parameter. It affects the number of pixels that are returned. 
@@ -68,13 +70,14 @@ def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
 
     google_url = "https://maps.googleapis.com/maps/api/staticmap?"
     out_dirc = os.getcwd()  if out_dirc == '.' else out_dirc
-
+    img_out = os.path.join(out_dirc,(img_name+img_ext))
+    
     if check == True and os.path.exists(os.path.join(out_dirc,(img_name+img_ext))):
         str_out = "User set check==True and it was found that\n" +\
                   "{} already exists.\n".format(os.path.join(out_dirc,(img_name+img_ext))) +\
                   "No request to Google Maps Static API was made.\n\n"
         print(str_out)
-        return None
+        return img_out
 
     request_url = "{}center={}&zoom={}&size={}&scale={}&key={}"
 
@@ -85,8 +88,7 @@ def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
     response = requests.get(request_url)
 
     # save out
-    img_out = os.path.join(out_dirc,(img_name+img_ext))
     with open(img_out,'wb') as img:
         img.write(response.content)
-    
+        
     return img_out
