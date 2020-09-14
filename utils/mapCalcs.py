@@ -30,7 +30,7 @@ def get_center(loc_data,coord,coord_keys,conversion=None):
 
     Returns: 
     --------
-    center_coords: ndarray
+    center_coords: ndarray or list
         Returns calculated center coordinates as shown below:
         [long_center_coord,lat_center_coord]
 
@@ -84,11 +84,11 @@ def get_corners(zoom,center,widxhght,in_coord_units='degrees',out_coord_units='d
     zoom: int
         Zoom level of the region desired
 
-    center: list, ndarray
+    center: list, or ndarray
         center coordinates in list or numpy array form
         [long_coord, lat_coord] 
     
-    widxhght: list, ndarray
+    widxhght: list or ndarray
         Defines the rectangular dimensions of the map. The parameter 
         takes a list of integers where the first value is the width 
         size and second is the height size
@@ -147,7 +147,7 @@ def get_center_pxs(center):
     """
     Parameters:
     -----------
-    center: list, ndarray
+    center: list or ndarray
         Center coordinates in list or numpy array form
         [long_coord, lat_coord] 
     
@@ -168,7 +168,9 @@ def get_center_pxs(center):
 
     point_x = mercator_origin_x+center_x*(256/360)
 
-    siny = math.sin(convert.units('deg_to_rad',center_y)) 
+    siny = math.sin(convert.units('deg_to_rad',center_y))
+    siny = max(siny,-0.9999) 
+    siny = min(siny, 0.9999) 
     point_y = mercator_origin_y+0.5 * math.log((1+siny) / 
               (1-siny)) * (-(256/(2*math.pi)))
    
@@ -181,11 +183,11 @@ def get_SW_point(scale,center_pxs,widxhght):
     scale: float
         Map scale based on zoom level
 
-    center_pxs: list, ndarray
+    center_pxs: list or ndarray
         Center pixel coordinates in list or numpy array form
         [long_coord, lat_coord] 
     
-    widxhght: list, ndarray
+    widxhght: list or ndarray
         Defines the rectangular dimensions of the map. The parameter 
         takes a list of integers where the first value is the width 
         size and second is the height size
@@ -224,11 +226,11 @@ def get_NE_point(scale,center_pxs,widxhght):
     scale: float
         Map scale based on zoom level
 
-    center_pxs: list, ndarray
+    center_pxs: list or ndarray
         Center pixel coordinates in list or numpy array form
         [long_coord, lat_coord] 
     
-    widxhght: list, ndarray
+    widxhght: list or ndarray
         Defines the rectangular dimensions of the map. The parameter 
         takes a list of integers where the first value is the width 
         size and second is the height size

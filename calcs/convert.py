@@ -13,7 +13,7 @@ def units(c_type,vals):
         conversion type is passed this function will return an error message
         and None
 
-    vals: np.ndarray, float, int
+    vals: np.ndarray, float, int, list
         Data to convert
 
     Returns:
@@ -31,7 +31,9 @@ def units(c_type,vals):
                  'deg_to_rad':      lambda x: x*(math.pi/180),
                  'rad_to_deg':      lambda x: x/(math.pi/180)}
 
-    if isinstance(vals,(np.ndarray,float,int)):
+    if isinstance(vals,(np.ndarray,float,int,list)):
+        if isinstance(vals,list):
+            vals = np.array(vals)
         if c_type not in unit_type:
             str_out = "{} not a valid conversion type\n" +\
                       "See calcs.convert.units() for available conversions"
@@ -42,7 +44,7 @@ def units(c_type,vals):
         
     else:
         str_out = "Check values passed, function units() takes either\n" +\
-                  "float value or floats within a numpy array."
+                  "list, float value or floats within a numpy array."
         print(str_out)
 
     return convert_result
