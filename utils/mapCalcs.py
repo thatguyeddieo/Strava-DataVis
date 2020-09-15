@@ -6,7 +6,7 @@ from calcs import convert
 
 def get_center(loc_data,coord,coord_keys,conversion=None):
     """
-    Parameters:
+    Parameters
     -----------
     loc_data: dict
         GPS data structure in the form defined by the formats package docstring
@@ -28,14 +28,11 @@ def get_center(loc_data,coord,coord_keys,conversion=None):
         in accordance with module calcs.convert.units() and its available
         conversion types
 
-    Returns: 
+    Returns
     --------
     center_coords: ndarray or list
         Returns calculated center coordinates as shown below:
         [long_center_coord,lat_center_coord]
-
-    Notes:
-    ------
 
     """
 
@@ -79,7 +76,7 @@ def get_center(loc_data,coord,coord_keys,conversion=None):
     
 def get_corners(zoom,center,widxhght,in_coord_units='degrees',out_coord_units='degrees'):
     """
-    Parameters:
+    Parameters
     -----------
     zoom: int
         Zoom level of the region desired
@@ -107,21 +104,21 @@ def get_corners(zoom,center,widxhght,in_coord_units='degrees',out_coord_units='d
         its available conversion types.
             * 'semi'
             
-    Returns:
+    Returns
     --------
-    corners: tuple
+    tuple
         Tuple containing the corners in the following order
         (n_lim, e_lim, s_lim, w_lim)
 
-    Notes:
+    Notes
     ------
-        Throughout this function x refers to longitude coordinates and
-        y refers to latitude coordinates.
+    Throughout this function x refers to longitude coordinates and
+    y refers to latitude coordinates.
 
-        The following constants are used to perform calculations
-        mercator length:            256
-        pixels per long degree:    (256/360)
-        pixels per lonng radian:   (256/(2*math.pi))
+    The following constants are used to perform calculations
+      * mercator length:            256
+      * pixels per long degree:    (256/360)
+      * pixels per lonng radian:   (256/(2*math.pi))
 
     """
 
@@ -156,9 +153,6 @@ def get_center_pxs(center):
     point_x, point_y: float
         Center longitude and latitude coordinates in pixels
 
-    Notes:
-    ------
-    
     """
 
     mercator_len = 256 
@@ -178,7 +172,7 @@ def get_center_pxs(center):
 
 def get_SW_point(scale,center_pxs,widxhght):
     """
-    Parameters:
+    Parameters
     -----------
     scale: float
         Map scale based on zoom level
@@ -192,15 +186,15 @@ def get_SW_point(scale,center_pxs,widxhght):
         takes a list of integers where the first value is the width 
         size and second is the height size
 
-    Returns:
+    Returns
     --------
     sw_lng, sw_lat: float
         Southwest corner coordinates in degrees
         [sw_long_coord, sw_lat_coord]
 
-    Notes:
+    Notes
     ------
-    Using the southwest coordinates the west and south map boundaries
+    Using the southwest coordinates, the west and south map boundaries
     are known 
     """
 
@@ -221,7 +215,7 @@ def get_SW_point(scale,center_pxs,widxhght):
 
 def get_NE_point(scale,center_pxs,widxhght):
     """
-    Parameters:
+    Parameters
     -----------
     scale: float
         Map scale based on zoom level
@@ -235,14 +229,15 @@ def get_NE_point(scale,center_pxs,widxhght):
         takes a list of integers where the first value is the width 
         size and second is the height size
 
-    Returns:
+    Returns
     --------
     ne_lng, ne_lat: float
         Northeast corner coordinates in degrees
         [ne_long_coord, ne_lat_coord]
-    Notes:
+
+    Notes
     ------
-    Using the northeast coordinates the north and east map boundaries
+    Using the northeast coordinates, the north and east map boundaries
     are known 
     """
 

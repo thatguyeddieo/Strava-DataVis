@@ -6,7 +6,7 @@ import requests
 def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
             img_ext='.png',out_dirc='.',check=False):
     """
-    Parameters:
+    Parameters
     -----------
     zm: int
         Zoom level of the region desired
@@ -41,8 +41,8 @@ def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
 
     img_ext: str
         Saved image extension
-        * .png (default)
-        * .txt
+          * .png (default)
+          * .txt
 
     out_dirc: str
         Directory path in which image is saved into
@@ -51,12 +51,12 @@ def get_map(zm,sc,cent,api_key,img_name,widxhght=[500,500],
         If True, this function will check to see if image file name as defined
         by img_name exisits in directory out_dirc.
 
-    Returns:
+    Returns
     --------
-    img_out: str
+    str
         Returns path to image generated
 
-    Notes:
+    Notes
     ------
         For more information about using Google Maps Static API visit:
         https://developers.google.com/maps/documentation/maps-static/start#Zoomlevels

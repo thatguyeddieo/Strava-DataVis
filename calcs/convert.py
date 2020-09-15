@@ -5,7 +5,7 @@ import numpy as np
 
 def units(c_type,vals):
     """
-    Parameters:
+    Parameters
     -----------
     c_type: str
         String containing conversion type
@@ -16,15 +16,17 @@ def units(c_type,vals):
     vals: np.ndarray, float, int, list
         Data to convert
 
-    Returns:
+    Returns
     --------
-    convert_result: np.ndarray, float, int
+    np.ndarray, float, int
         Returns new converted data in the same data type as what was
         passed in vals
 
-    Notes:
-    ------
-
+    Examples
+    ---------
+    >>> import numpy as np
+    >>> print('Hello World')
+    Hello World
     """
     unit_type = {'deg_to_semi':     lambda x: x*(2**31)/180,
                  'semi_to_deg':     lambda x: x*180/(2**31),

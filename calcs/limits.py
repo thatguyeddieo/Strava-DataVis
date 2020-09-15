@@ -5,7 +5,7 @@ import numpy as np
 
 def check_bounds(d,min_val,max_val):
     """
-    Parameters:
+    Parameters
     -----------
     d: list or ndarray
         Values to analysis
@@ -15,15 +15,13 @@ def check_bounds(d,min_val,max_val):
 
     max_val: float or int
         Upper bound to check against
-    Returns:
+
+    Returns
     --------
     boolean
         Where True is returned if the values in parameter d do not 
         exceed the bounds. And False is returned if at least one value 
         in parameter d exceeds the min or max bounds
-
-    Notes:
-    ------
 
     """
 

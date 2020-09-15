@@ -7,7 +7,7 @@ from datetime import datetime
 
 def parse(loc_data,fn):
     """
-    Parameters:
+    Parameters
     -----------
     loc_data: dict
         GPS data structure in the form defined by the formats package docstring
@@ -16,28 +16,36 @@ def parse(loc_data,fn):
     fn: str
         Gzip file name containing compressed .fit file
 
-    Returns:
+    Returns
     --------
     None
 
-    Notes:
+    Notes
     ------
-        This function will add to loc_data['activities'] by including the .fit
-        file's parameters and values. In the same format as defined in the 
-        formats package docstring.
+    This function will add to loc_data['activities'] by including the .fit
+    file's parameters and values. In the same format as defined in the 
+    formats package docstring.
 
-        {'activities': {'Act_1': {'Param_1': np.array([]), 'Param_2': np.array([]), ...}, 
-                       {'Act_2': {'Param_1': np.array([]), 'Param_2': np.array([]), ...},
-                       ...}
+    {'activities': {'Act_1': {'Param_1': np.array([]), 'Param_2': np.array([]), ...}, 
+                    {'Act_2': {'Param_1': np.array([]), 'Param_2': np.array([]), ...},
+                    ...}
 
-        The list of parameters to parse include:
-                * altitude, enhanced_altitude, position_lat, position_long, speed,
-                  enhanced_speed, distance, heart_rate, timestamp
-                  
+    The list of parameters to parse include:
+        * altitude
+        * enhanced_altitude
+        * position_lat
+        * position_long
+        * speed
+        * enhanced_speed
+        * distance
+        * heart_rate
+        * timestamp
+                
         Note to developers:
         Make more robust by checing if file is gzip or fit.
         Check to see if dictionary was already created which contains
         activity and unit keys
+        
     """
 
     try:

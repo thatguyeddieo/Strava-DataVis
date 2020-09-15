@@ -8,15 +8,15 @@ from xlrd import open_workbook
 
 def create_datastruct(include_units=True):
     """
-    Parameters:
+    Parameters
     -----------
     include_units: boolean
         By default set to True. This will include a units keys to the GPS
         data structure containing parameter and unit pairs
 
-    Returns:
+    Returns
     --------
-    loc_data: dict
+    dict
         Returns a GPS data structure in the form of nested dictionaries
         Where the first set of key contain 'activities' and 'units' keys
 
@@ -27,11 +27,18 @@ def create_datastruct(include_units=True):
                        {'Act_2': {'Param_1': np.array([]), 'Param_2': np.array([]), ...},
                        ...}
         
-    Notes:
+    Notes
     ------
     List of parameters units to add include:
-        * altitude, enhanced_altitude, position_lat, position_long, speed,
-          enhanced_speed, distance, heart_rate, timestamp
+        * altitude
+        * enhanced_altitude
+        * position_lat
+        * position_long
+        * speed
+        * enhanced_speed
+        * distance
+        * heart_rate
+        * timestamp
     """
 
     loc_data = {'activities': {}}
@@ -48,7 +55,7 @@ def create_datastruct(include_units=True):
     
 def write_xlsx(loc_data,new_dir):
     """
-    Parameters:
+    Parameters
     -----------
     loc_data: dict
         GPS data structure in the form defined by the formats package docstring
@@ -62,12 +69,9 @@ def write_xlsx(loc_data,new_dir):
         Directory name to create, ensure it does not already exists
         This function only works in the current working directory
 
-    Returns:
+    Returns
     --------
     None
-
-    Notes:
-    ------
 
     """
 
@@ -111,7 +115,7 @@ def write_xlsx(loc_data,new_dir):
 
 def read_xlsx(n_dir,fname=None,activities=None):
     """
-    Parameters:
+    Parameters
     -----------
     n_dir: str
         Directory name to read
@@ -126,9 +130,9 @@ def read_xlsx(n_dir,fname=None,activities=None):
         List of desired parameter names to read as strings
         If None, all parameters will be read
 
-    Returns:
+    Returns
     --------
-    loc_data: dict
+    dict
         Returns a GPS data structure in the form of nested dictionaries
         Where the first set of keys contain 'activities' and 'units' keys,
         unless if stated differently by fname.
@@ -140,9 +144,6 @@ def read_xlsx(n_dir,fname=None,activities=None):
         {'activities': {'Act_1': {'Param_1': np.array([]), 'Param_2': np.array([]), ...}, 
                        {'Act_2': {'Param_1': np.array([]), 'Param_2': np.array([]), ...},
                        ...}
-
-    Notes:
-    ------
 
     """
 

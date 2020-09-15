@@ -5,15 +5,16 @@ from scipy import interpolate
 
 def intrp1d(loc_data,new_parm,params,step_size,activities='All',kind='linear'):
     """
-    Parameters:
+    Parameters
     -----------
     loc_data: dict
         GPS data structure in the form defined by the formats package docstring
         Dict of activities, their parameters and values:
-        loc_data: {'Activities': {'Act_1': {'Speed': np.array([1,2,3... ]), ... } 
-                                  'Act_2': {'Speed': np.array([1,2,3... ]), ... }
-                                  ...} 
-                    'Units': ...}
+        loc_data: 
+        {'Activities': {'Act_1': {'Speed': np.array([1,2,3... ]), ... } 
+                        'Act_2': {'Speed': np.array([1,2,3... ]), ... }
+                        ...} 
+         'Units': ...}
 
     new_parm: str
         New parameter name which will be added to the GPS data structure
@@ -46,14 +47,13 @@ def intrp1d(loc_data,new_parm,params,step_size,activities='All',kind='linear'):
         integer specifying the order of the spline interpolator to use. Default 
         is ‘linear’.
 
-    Returns:
+    Returns
     --------
-    loc_data
-        Data structure containing a
-
-    Notes:
-    ------
     None
+
+    Notes
+    -----
+    This module will add the interpolated parameters to the GPS data structure
     
     """
 
