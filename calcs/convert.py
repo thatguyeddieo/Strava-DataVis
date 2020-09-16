@@ -25,9 +25,19 @@ def units(c_type,vals):
     Examples
     ---------
     >>> import numpy as np
-    >>> print('Hello World')
-    Hello World
+    >>> x = np.arange(0,2*np.pi,np.pi/4)
+    >>> x = convert.units('rad_to_deg',x)
+    >>> print(x)
+    [  0.  45.  90. 135. 180. 225. 270. 315.]
+
+
+    >>> center = [-122.338024,47.677978] # [long, lat] degrees
+    >>> center_semi = convert.units('deg_to_semi',center)
+    >>> print(center_semi, 'semicircle units')
+    [-1.45954948e+09  5.68820434e+08] semicircle units
+
     """
+
     unit_type = {'deg_to_semi':     lambda x: x*(2**31)/180,
                  'semi_to_deg':     lambda x: x*180/(2**31),
                  'deg_to_rad':      lambda x: x*(math.pi/180),

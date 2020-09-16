@@ -15,7 +15,7 @@ importlib.reload(convert)
 
 
 # load dateset from folder
-read_dir = "new_dataset"
+read_dir = "datasets/new_dataset"
 strava_data = formats.read_xlsx(read_dir)
 
 # calculate elapsed time
@@ -25,7 +25,8 @@ for a_key in strava_data['activities'].keys():
     strava_data['activities'][a_key]['elpsd_time'] = t_stmp - t_stmp[0]
 
 # interpolate data
-calcintrp.intrp1d(strava_data,'lat_intrp',['elpsd_time','position_lat'],step_size=1)
+
+print(calcintrp.intrp1d(strava_data,'lat_intrp',['elpsd_time','position_lat'],step_size=1))
 calcintrp.intrp1d(strava_data,'long_intrp',['elpsd_time','position_long'],step_size=1)
 calcintrp.intrp1d(strava_data,'speed_intrp',['elpsd_time','enhanced_speed'], step_size=1)
 
@@ -34,9 +35,9 @@ unit_info = {'lat_intrp': 'semicircles',   'long_intrp': 'semicircles',
              'speed_intrp': 'm/s',         'elpsd_time': 'seconds'}
 strava_data['units'].update(unit_info)
 
-# write dataset to new directory
-new_dir = "Interpolated_Dataset"
-formats.write_xlsx(strava_data,new_dir)
+# # write dataset to new directory
+# new_dir = "Interpolated_Dataset"
+# formats.write_xlsx(strava_data,new_dir)
 
 
 
