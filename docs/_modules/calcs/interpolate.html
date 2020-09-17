@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>calcs.interpolate &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">calcs.interpolate</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for calcs.interpolate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
+<span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="intrp1d"><a class="viewcode-back" href="../../calcs.html#calcs.interpolate.intrp1d">[docs]</a><span class="k">def</span> <span class="nf">intrp1d</span><span class="p">(</span><span class="n">loc_data</span><span class="p">,</span><span class="n">new_parm</span><span class="p">,</span><span class="n">params</span><span class="p">,</span><span class="n">step_size</span><span class="p">,</span><span class="n">activities</span><span class="o">=</span><span class="s1">&#39;All&#39;</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    loc_data: dict</span>
+<span class="sd">        GPS data structure in the form defined by the formats package docstring</span>
+<span class="sd">        Dict of activities, their parameters and values:</span>
+<span class="sd">        loc_data: </span>
+<span class="sd">        {&#39;Activities&#39;: {&#39;Act_1&#39;: {&#39;Speed&#39;: np.array([1,2,3... ]), ... } </span>
+<span class="sd">                        &#39;Act_2&#39;: {&#39;Speed&#39;: np.array([1,2,3... ]), ... }</span>
+<span class="sd">                        ...} </span>
+<span class="sd">         &#39;Units&#39;: ...}</span>
+
+<span class="sd">    new_parm: str</span>
+<span class="sd">        New parameter name which will be added to the GPS data structure</span>
+
+<span class="sd">    params: list</span>
+<span class="sd">        List of parameters to use for interpolation</span>
+<span class="sd">        Where the first index contains a string naming the independent parameter</span>
+<span class="sd">        and the second index contains a string naming the dependent parameter</span>
+
+<span class="sd">        Exampe:  [&#39;Time&#39;,&#39;Speed&#39;]</span>
+<span class="sd">                   Time = Independent variable</span>
+<span class="sd">                   Speed = Dependent variable</span>
+
+<span class="sd">    step_size: float, int</span>
+<span class="sd">        The first and last data point from the independent paramter along with</span>
+<span class="sd">        the step size parameter will be used to create a new independent</span>
+<span class="sd">        parameter for interpolation</span>
+
+<span class="sd">    activity: str, list</span>
+<span class="sd">        By default a string value adding interpolation results to all activities.</span>
+<span class="sd">        Pass list to specify an activity or activities</span>
+
+<span class="sd">    kind: str or int</span>
+<span class="sd">        From scipy documentation:</span>
+<span class="sd">        Specifies the kind of interpolation as a string (‘linear’, ‘nearest’, </span>
+<span class="sd">        ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’, ‘next’,</span>
+<span class="sd">        where ‘zero’, ‘slinear’, ‘quadratic’ and ‘cubic’ refer to a spline </span>
+<span class="sd">        interpolation of zeroth, first, second or third order; ‘previous’ and </span>
+<span class="sd">        ‘next’ simply return the previous or next value of the point) or as an </span>
+<span class="sd">        integer specifying the order of the spline interpolator to use. Default </span>
+<span class="sd">        is ‘linear’.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This module will add the interpolated parameters to the GPS data structure</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># check that only one indp variable was passed</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;Check that params contains only independent and</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;dependent variables in that order.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;User passed:  params = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span>\
+                  <span class="s2">&quot;Expected:     params = [&#39;ind var&#39;,&#39;dep var&#39;]</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># tuples work</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span><span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">activities</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">activs</span> <span class="o">=</span> <span class="n">activities</span>
+    <span class="k">elif</span> <span class="n">activities</span> <span class="o">==</span> <span class="s1">&#39;All&#39;</span><span class="p">:</span>
+        <span class="n">activs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">activs</span><span class="p">:</span>
+        <span class="n">act_parms</span> <span class="o">=</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">a</span><span class="p">]</span>
+
+        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span>
+                          <span class="n">stop</span><span class="o">=</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                          <span class="n">step</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
+        
+        <span class="n">int_func</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                        <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+
+        <span class="n">new_func</span> <span class="o">=</span> <span class="n">int_func</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
+
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">a</span><span class="p">][</span><span class="n">new_parm</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_func</span>
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">a</span><span class="p">][</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_intrp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">x_new</span>
+        
+    <span class="k">return</span> <span class="kc">None</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">calcs.interpolate</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

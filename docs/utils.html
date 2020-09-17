@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>utils package &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="formats package" href="formats.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formats.html" title="formats package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Permalink to this headline">¶</a></h1>
+<p>Text here</p>
+<div class="section" id="module-utils.googleAPI">
+<span id="utils-googleapi-module"></span><h2>utils.googleAPI module<a class="headerlink" href="#module-utils.googleAPI" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<dl class="py function">
+<dt id="utils.googleAPI.get_map">
+<code class="sig-prename descclassname">utils.googleAPI.</code><code class="sig-name descname">get_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zm</span></em>, <em class="sig-param"><span class="n">sc</span></em>, <em class="sig-param"><span class="n">cent</span></em>, <em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">img_name</span></em>, <em class="sig-param"><span class="n">widxhght</span><span class="o">=</span><span class="default_value">[500, 500]</span></em>, <em class="sig-param"><span class="n">img_ext</span><span class="o">=</span><span class="default_value">'.png'</span></em>, <em class="sig-param"><span class="n">out_dirc</span><span class="o">=</span><span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">check</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/googleAPI.html#get_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.googleAPI.get_map" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zm</strong> (<em>int</em>) – <dl class="simple">
+<dt>Zoom level of the region desired</dt><dd><ul>
+<li><p>Max = 20</p></li>
+<li><p>Min = 1</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>sc</strong> (<em>int</em>) – Scale parameter. It affects the number of pixels that are returned.
+scale=2 returns twice as many pixels as scale=1 while retaining the
+same coverage area and level of detail (i.e. the contents of the map
+don’t change)</p></li>
+<li><p><strong>cent</strong> (<em>ndarray</em><em> or </em><em>list</em>) – Center coordinates in list or numpy array form
+Must be in degree units
+[lat_coord,long_coord]</p></li>
+<li><p><strong>api_key</strong> (<em>str</em>) – API key parameter needed to connect to Google Maps Static platform
+Google requires a unique API key to authenticate requests.
+Get an API key here:
+<a class="reference external" href="https://developers.google.com/maps/documentation/maps-static/get-api-key">https://developers.google.com/maps/documentation/maps-static/get-api-key</a></p></li>
+<li><p><strong>img_name</strong> (<em>str</em>) – Filename for image generated</p></li>
+<li><p><strong>widxhght</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Defines the rectangular dimensions of the map image in pixels. The
+parameter takes a list of integers where the first value is the width
+size and second is the height size.
+By default set to 500x500 pixels</p></li>
+<li><p><strong>img_ext</strong> (<em>str</em>) – <dl class="simple">
+<dt>Saved image extension</dt><dd><ul>
+<li><p>.png (default)</p></li>
+<li><p>.txt</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>out_dirc</strong> (<em>str</em>) – Directory path in which image is saved into</p></li>
+<li><p><strong>check</strong> (<em>bool</em>) – If True, this function will check to see if image file name as defined
+by img_name exisits in directory out_dirc.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns path to image generated</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For more information about using Google Maps Static API visit:
+<a class="reference external" href="https://developers.google.com/maps/documentation/maps-static/start#Zoomlevels">https://developers.google.com/maps/documentation/maps-static/start#Zoomlevels</a></p>
+<p>Setting check=True can be useful if the user wishs to reduce their
+requests from the Google Maps Static API site. Instead of repeatily
+creating the same center, zoom, and scale static map, the user can
+save time and efforts by reusing already created map images.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-utils.mapCalcs">
+<span id="utils-mapcalcs-module"></span><h2>utils.mapCalcs module<a class="headerlink" href="#module-utils.mapCalcs" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<dl class="py function">
+<dt id="utils.mapCalcs.get_NE_point">
+<code class="sig-prename descclassname">utils.mapCalcs.</code><code class="sig-name descname">get_NE_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em>, <em class="sig-param"><span class="n">center_pxs</span></em>, <em class="sig-param"><span class="n">widxhght</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mapCalcs.html#get_NE_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mapCalcs.get_NE_point" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> (<em>float</em>) – Map scale based on zoom level</p></li>
+<li><p><strong>center_pxs</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Center pixel coordinates in list or numpy array form
+[long_coord, lat_coord]</p></li>
+<li><p><strong>widxhght</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Defines the rectangular dimensions of the map. The parameter
+takes a list of integers where the first value is the width
+size and second is the height size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ne_lng, ne_lat</strong> – Northeast corner coordinates in degrees
+[ne_long_coord, ne_lat_coord]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Using the northeast coordinates, the north and east map boundaries
+are known</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="utils.mapCalcs.get_SW_point">
+<code class="sig-prename descclassname">utils.mapCalcs.</code><code class="sig-name descname">get_SW_point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em>, <em class="sig-param"><span class="n">center_pxs</span></em>, <em class="sig-param"><span class="n">widxhght</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mapCalcs.html#get_SW_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mapCalcs.get_SW_point" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> (<em>float</em>) – Map scale based on zoom level</p></li>
+<li><p><strong>center_pxs</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Center pixel coordinates in list or numpy array form
+[long_coord, lat_coord]</p></li>
+<li><p><strong>widxhght</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Defines the rectangular dimensions of the map. The parameter
+takes a list of integers where the first value is the width
+size and second is the height size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>sw_lng, sw_lat</strong> – Southwest corner coordinates in degrees
+[sw_long_coord, sw_lat_coord]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Using the southwest coordinates, the west and south map boundaries
+are known</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="utils.mapCalcs.get_center">
+<code class="sig-prename descclassname">utils.mapCalcs.</code><code class="sig-name descname">get_center</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loc_data</span></em>, <em class="sig-param"><span class="n">coord</span></em>, <em class="sig-param"><span class="n">coord_keys</span></em>, <em class="sig-param"><span class="n">conversion</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mapCalcs.html#get_center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mapCalcs.get_center" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loc_data</strong> (<em>dict</em>) – <p>GPS data structure in the form defined by the formats package docstring
+Dict of activities, their parameters and values:
+loc_data: {‘Activities’: {‘Act_1’: {‘Speed’: np.array([1,2,3… ]), … }</p>
+<blockquote>
+<div><blockquote>
+<div><p>’Act_2’: {‘Speed’: np.array([1,2,3… ]), … }
+…}</p>
+</div></blockquote>
+<p>’Units’: …}</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>coord</strong> (<em>int</em><em> or </em><em>range</em>) – Coordinates to index</p></li>
+<li><p><strong>coord_keys</strong> (<em>list</em>) – Coordinate parameter names as strings
+where longitude is the first string and latitude is the second</p></li>
+<li><p><strong>conversion</strong> (<em>None</em><em>, </em><em>str</em>) – By default set to None, user can provide conversion string to use
+in accordance with module calcs.convert.units() and its available
+conversion types</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>center_coords</strong> – Returns calculated center coordinates as shown below:
+[long_center_coord,lat_center_coord]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray or list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="utils.mapCalcs.get_center_pxs">
+<code class="sig-prename descclassname">utils.mapCalcs.</code><code class="sig-name descname">get_center_pxs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">center</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mapCalcs.html#get_center_pxs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mapCalcs.get_center_pxs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>center: list or ndarray</dt><dd><p>Center coordinates in list or numpy array form
+[long_coord, lat_coord]</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>point_x, point_y: float</dt><dd><p>Center longitude and latitude coordinates in pixels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="utils.mapCalcs.get_corners">
+<code class="sig-prename descclassname">utils.mapCalcs.</code><code class="sig-name descname">get_corners</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zoom</span></em>, <em class="sig-param"><span class="n">center</span></em>, <em class="sig-param"><span class="n">widxhght</span></em>, <em class="sig-param"><span class="n">in_coord_units</span><span class="o">=</span><span class="default_value">'degrees'</span></em>, <em class="sig-param"><span class="n">out_coord_units</span><span class="o">=</span><span class="default_value">'degrees'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/mapCalcs.html#get_corners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.mapCalcs.get_corners" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zoom</strong> (<em>int</em>) – Zoom level of the region desired</p></li>
+<li><p><strong>center</strong> (<em>list</em><em>, or </em><em>ndarray</em>) – center coordinates in list or numpy array form
+[long_coord, lat_coord]</p></li>
+<li><p><strong>widxhght</strong> (<em>list</em><em> or </em><em>ndarray</em>) – Defines the rectangular dimensions of the map. The parameter
+takes a list of integers where the first value is the width
+size and second is the height size</p></li>
+<li><p><strong>in_coord_units</strong> (<em>str</em>) – <p>This function calculates the corners by initizaling the center
+in degree units if non degree units are passed. The function
+will use the in_coord_units string value to convert the data
+from what is passed to degrees then perform the calculations.
+Available options include:</p>
+<blockquote>
+<div><ul>
+<li><p>’semi’</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>out_coord_units</strong> (<em>str</em>) – <p>By default set to degrees, user can provide conversion string
+to use in accordance with module calcs.convert.units() and
+its available conversion types.</p>
+<blockquote>
+<div><ul>
+<li><p>’semi’</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple containing the corners in the following order
+(n_lim, e_lim, s_lim, w_lim)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Throughout this function x refers to longitude coordinates and
+y refers to latitude coordinates.</p>
+<dl class="simple">
+<dt>The following constants are used to perform calculations</dt><dd><ul class="simple">
+<li><p>mercator length:            256</p></li>
+<li><p>pixels per long degree:    (256/360)</p></li>
+<li><p>pixels per lonng radian:   (256/(2*math.pi))</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">utils package</a><ul>
+<li><a class="reference internal" href="#module-utils.googleAPI">utils.googleAPI module</a></li>
+<li><a class="reference internal" href="#module-utils.mapCalcs">utils.mapCalcs module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="formats.html"
+                        title="previous chapter">formats package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formats.html" title="formats package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
