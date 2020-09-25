@@ -267,6 +267,97 @@ y refers to latitude coordinates.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="utils-lineproperties-module">
+<h2>utils.lineProperties module<a class="headerlink" href="#utils-lineproperties-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-utils.lineProperties"></span><hr class="docutils" />
+<dl class="py function">
+<dt id="utils.lineProperties.add_points">
+<code class="sig-prename descclassname">utils.lineProperties.</code><code class="sig-name descname">add_points</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lc</span></em>, <em class="sig-param"><span class="n">point</span></em>, <em class="sig-param"><span class="n">num_points</span></em>, <em class="sig-param"><span class="n">rgba</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/lineProperties.html#add_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.lineProperties.add_points" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lc</strong> (<em>LineCollection</em>) – </p></li>
+<li><p><strong>point</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
+<li><p><strong>num_points</strong> (<em>int</em>) – </p></li>
+<li><p><strong>rgba</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Adds points and rgba to LineCollection object
+Meant to take in only one point!</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">LineCollection</span><span class="p">([])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_points</span><span class="p">,</span> <span class="n">tail_length</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mf">4.</span><span class="p">)</span><span class="o">*</span><span class="n">n_points</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rgb_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tip_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rgba_color</span> <span class="o">=</span> <span class="n">lineProp</span><span class="o">.</span><span class="n">define_colors</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span><span class="n">tail_length</span><span class="p">,</span>
+<span class="go">                                        rgb_color,tip_color)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">lineProp</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">line</span><span class="p">,[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="n">n_points</span><span class="p">,</span><span class="n">rgba_color</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Line Segments: &quot;</span><span class="p">,</span><span class="n">line</span><span class="o">.</span><span class="n">get_segments</span><span class="p">())</span>
+<span class="go">Line Segments:</span>
+<span class="go">[array([[0., 0.], [0., 0.]]),</span>
+<span class="go"> array([[0., 0.], [1., 1.]]),</span>
+<span class="go"> array([[1., 1.], [2., 2.]]),</span>
+<span class="go"> array([[2., 2.], [3., 3.]]),</span>
+<span class="go"> array([[3., 3.], [4., 4.]]),</span>
+<span class="go"> array([[4., 4.], [5., 5.]]),</span>
+<span class="go"> array([[5., 5.], [6., 6.]]),</span>
+<span class="go"> array([[6., 6.], [7., 7.]]),</span>
+<span class="go"> array([[7., 7.], [8., 8.]]),</span>
+<span class="go"> array([[8., 8.], [9., 9.]])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="utils.lineProperties.define_colors">
+<code class="sig-prename descclassname">utils.lineProperties.</code><code class="sig-name descname">define_colors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_points</span></em>, <em class="sig-param"><span class="n">tail_len</span></em>, <em class="sig-param"><span class="n">rgb</span></em>, <em class="sig-param"><span class="n">rgb_tip</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils/lineProperties.html#define_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#utils.lineProperties.define_colors" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_points</strong> (<em>int</em>) – </p></li>
+<li><p><strong>tail_len</strong> (<em>float</em><em>, </em><em>int</em>) – </p></li>
+<li><p><strong>rgb</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
+<li><p><strong>rgb_tip</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rgba</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n_points</span><span class="p">,</span> <span class="n">tail_length</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mf">4.</span><span class="p">)</span><span class="o">*</span><span class="n">n_points</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rgb_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tip_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rgba_color</span> <span class="o">=</span> <span class="n">lineProp</span><span class="o">.</span><span class="n">define_colors</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span><span class="n">tail_length</span><span class="p">,</span>
+<span class="go">                                        rgb_color,tip_color)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rgba Matrix: &quot;</span><span class="p">,</span><span class="n">rgba_color</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alphas</span> <span class="o">=</span> <span class="n">rgba_color</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Alphas: : &quot;</span><span class="p">,</span><span class="n">alphas</span><span class="p">)</span>
+<span class="go">RGBA Matrix:</span>
+<span class="go">[[0.         0.5        1.         0.14285714]</span>
+<span class="go"> [0.         0.5        1.         0.28571429]</span>
+<span class="go"> [0.         0.5        1.         0.42857143]</span>
+<span class="go"> [0.         0.5        1.         0.57142857]</span>
+<span class="go"> [0.         0.5        1.         0.71428571]</span>
+<span class="go"> [1.         0.         0.         0.85714286]</span>
+<span class="go"> [1.         0.         0.         1.        ]</span>
+<span class="go"> [1.         0.         0.         1.        ]</span>
+<span class="go"> [1.         0.         0.         1.        ]</span>
+<span class="go"> [1.         0.         0.         1.        ]]</span>
+<span class="go">Alphas: :</span>
+<span class="go">[0.14285714 0.28571429 0.42857143 0.57142857 0.71428571 0.85714286</span>
+<span class="go">1.         1.         1.         1.        ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -281,6 +372,7 @@ y refers to latitude coordinates.</p>
 <li><a class="reference internal" href="#">utils package</a><ul>
 <li><a class="reference internal" href="#module-utils.googleAPI">utils.googleAPI module</a></li>
 <li><a class="reference internal" href="#module-utils.mapCalcs">utils.mapCalcs module</a></li>
+<li><a class="reference internal" href="#utils-lineproperties-module">utils.lineProperties module</a></li>
 </ul>
 </li>
 </ul>

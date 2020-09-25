@@ -16,3 +16,10 @@ utils.mapCalcs module
     :members:
     :undoc-members:
     :show-inheritance:
+
+utils.lineProperties module
+---------------------
+.. automodule:: utils.lineProperties
+    :members:
+    :undoc-members:
+    :show-inheritance:
