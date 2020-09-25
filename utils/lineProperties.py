@@ -8,20 +8,31 @@ def add_points(lc,point,num_points,rgba):
     Parameters
     -----------
     lc: LineCollection
-
+        
     point: list, np.ndarray
+        Point to add to LineCollection lc
+        Must be a single point in the form [x,y]
 
     num_points: int
+        Number of points to display. As more than num_points get
+        added to LineCollection lc, the function will display the 
+        most recent num_points points
 
-    rgba: 
+    rgba: np.ndarray
+        Red, green, blue, alpha color matrix. Should be a 2D array
+        with shape (num_points,4). See get_colors() for more 
+        information
 
     Returns
     --------
-
+    None
     Notes
     -----
-    Adds points and rgba to LineCollection object
-    Meant to take in only one point!
+    Function returns None but sets LineCollection lc's segments
+    and colors. The segments are added as a 3D array of size 
+    (num_points,2,2). See the example below in Examples
+
+    lc's colors are set using the rgba parameter
     
     Examples
     --------
@@ -94,17 +105,30 @@ def define_colors(num_points,tail_len,rgb,rgb_tip):
     Parameters
     -----------
     num_points: int
+        Number of points to display. As more than num_points get
+        added to LineCollection lc, the function will display the 
+        most recent num_points points
 
     tail_len: float, int
+        The portion of segments to be considered as the tail. The
+        tail will be faded out by reducing their alpha values
 
     rgb: list, np.ndarray
+        [Red, Green, Blue] color mapping to use for the line 
 
     rgb_tip: list, np.ndarray
+        [Red, Green, Blue] color mapping to use for the tip
+        The tip in this case is define as the first 5 points
 
     Returns
     --------
     rgba: 
-
+        Red, green, blue, alpha color matrix. Returned as a 2D array
+        with shape (num_points,4). Where each row is a point. While the 
+        first three columns represent the Red, Green, Blue (RGB) shades,
+        and the last column represents the alpha values associated with 
+        each point. See example below
+        
     Examples
     --------
     >>> n_points, tail_length = 10, (3/4.)*n_points

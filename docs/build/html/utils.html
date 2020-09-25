@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>utils package &#8212; Strava-DataVis 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/corlab.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -277,15 +277,28 @@ y refers to latitude coordinates.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lc</strong> (<em>LineCollection</em>) – </p></li>
-<li><p><strong>point</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
-<li><p><strong>num_points</strong> (<em>int</em>) – </p></li>
-<li><p><strong>rgba</strong> – </p></li>
+<li><p><strong>point</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – Point to add to LineCollection lc
+Must be a single point in the form [x,y]</p></li>
+<li><p><strong>num_points</strong> (<em>int</em>) – Number of points to display. As more than num_points get
+added to LineCollection lc, the function will display the
+most recent num_points points</p></li>
+<li><p><strong>rgba</strong> (<em>np.ndarray</em>) – Red, green, blue, alpha color matrix. Should be a 2D array
+with shape (num_points,4). See get_colors() for more
+information</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Adds points and rgba to LineCollection object
-Meant to take in only one point!</p>
+<p>Function returns None but sets LineCollection lc’s segments
+and colors. The segments are added as a 3D array of size
+(num_points,2,2). See the example below in Examples</p>
+<p>lc’s colors are set using the rgba parameter</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">LineCollection</span><span class="p">([])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n_points</span><span class="p">,</span> <span class="n">tail_length</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mf">4.</span><span class="p">)</span><span class="o">*</span><span class="n">n_points</span>
@@ -317,14 +330,22 @@ Meant to take in only one point!</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_points</strong> (<em>int</em>) – </p></li>
-<li><p><strong>tail_len</strong> (<em>float</em><em>, </em><em>int</em>) – </p></li>
-<li><p><strong>rgb</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
-<li><p><strong>rgb_tip</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – </p></li>
+<li><p><strong>num_points</strong> (<em>int</em>) – Number of points to display. As more than num_points get
+added to LineCollection lc, the function will display the
+most recent num_points points</p></li>
+<li><p><strong>tail_len</strong> (<em>float</em><em>, </em><em>int</em>) – The portion of segments to be considered as the tail. The
+tail will be faded out by reducing their alpha values</p></li>
+<li><p><strong>rgb</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – [Red, Green, Blue] color mapping to use for the line</p></li>
+<li><p><strong>rgb_tip</strong> (<em>list</em><em>, </em><em>np.ndarray</em>) – [Red, Green, Blue] color mapping to use for the tip
+The tip in this case is define as the first 5 points</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>Red, green, blue, alpha color matrix. Returned as a 2D array
+with shape (num_points,4). Where each row is a point. While the
+first three columns represent the Red, Green, Blue (RGB) shades,
+and the last column represents the alpha values associated with
+each point. See example below</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>rgba</p>
