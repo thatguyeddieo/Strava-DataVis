@@ -67,15 +67,16 @@ def parse(loc_data,fn):
         fit_key = f_split[-1][:-7]
         fitfile = fitparse.FitFile(n)
 
+        # Default parameters to track
         loc_data['activities'][fit_key] = {'altitude':[],       'enhanced_altitude':[],
                                            'position_lat': [],  'position_long':[],
                                            'speed':[],          'enhanced_speed':[],
-                                           'distance':[],       'heart_rate':[],
-                                           'timestamp':[]}
-
+                                           'distance':[],       'timestamp':[]}
+        
         for record in fitfile.get_messages("record"):
-            # by checking if len(record.fields)==10 the fucntion will pull out synchronous data
-            if len(record.fields) == 10:
+            # by checking if len(record.fields) >= 8 the function will pull out data containing at least 8 parameters
+            # which may or may not match the parameters listed above.
+            if len(record.fields) >= 8:
                 for data in record:
                     if str(data.name) in loc_data['activities'][fit_key].keys():
                         if data.name == 'timestamp':
@@ -83,4 +84,10 @@ def parse(loc_data,fn):
                         else:
                             loc_data['activities'][fit_key][str(data.name)].append(data.value)
 
+        for k in loc_data['activities'][fit_key].keys():
+            # check to see if list is empty
+            if not loc_data['activities'][fit_key][k]:
+                error_out = "\tWarning: Parameter {} was not populated with data.".format(k)
+                print(error_out)
+                
     return None

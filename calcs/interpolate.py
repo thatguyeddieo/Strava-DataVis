@@ -76,14 +76,26 @@ def intrp1d(loc_data,new_parm,params,step_size,activities='All',kind='linear'):
         activs = [i for i in loc_data['activities'].keys()]
 
     for a in activs:
-        act_parms = loc_data['activities'][a]
 
-        x_new = np.arange(start=act_parms[params[0]][0],
-                          stop=act_parms[params[0]][-1],
-                          step=step_size)
+        # Get data
+        act_parms = loc_data['activities'][a]
+        x_data = act_parms[params[0]]
+        y_data = act_parms[params[1]]
+
+        # Remove any empty data strings or None types        
+        array_logical = lambda array: np.logical_and(array != '',array != None)
+
+        combined_index = np.logical_and(array_logical(x_data),array_logical(y_data))
+
+        x_data_filtered = act_parms[params[0]][combined_index]
+        y_data_filtered = act_parms[params[1]][combined_index]
         
-        int_func = interpolate.interp1d(act_parms[params[0]],
-                                        act_parms[params[1]],kind=kind)
+        x_new = np.arange(start=x_data_filtered[0],
+                          stop=x_data_filtered[-1],
+                          step=step_size)
+
+        int_func = interpolate.interp1d(x_data_filtered,
+                                        y_data_filtered,kind=kind)
 
         new_func = int_func(x_new)
 

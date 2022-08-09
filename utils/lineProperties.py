@@ -26,6 +26,7 @@ def add_points(lc,point,num_points,rgba):
     Returns
     --------
     None
+    
     Notes
     -----
     Function returns None but sets LineCollection lc's segments
