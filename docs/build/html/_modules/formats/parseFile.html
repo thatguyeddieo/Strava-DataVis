@@ -106,15 +106,16 @@
         <span class="n">fit_key</span> <span class="o">=</span> <span class="n">f_split</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span>
         <span class="n">fitfile</span> <span class="o">=</span> <span class="n">fitparse</span><span class="o">.</span><span class="n">FitFile</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
+        <span class="c1"># Default parameters to track</span>
         <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;altitude&#39;</span><span class="p">:[],</span>       <span class="s1">&#39;enhanced_altitude&#39;</span><span class="p">:[],</span>
                                            <span class="s1">&#39;position_lat&#39;</span><span class="p">:</span> <span class="p">[],</span>  <span class="s1">&#39;position_long&#39;</span><span class="p">:[],</span>
                                            <span class="s1">&#39;speed&#39;</span><span class="p">:[],</span>          <span class="s1">&#39;enhanced_speed&#39;</span><span class="p">:[],</span>
-                                           <span class="s1">&#39;distance&#39;</span><span class="p">:[],</span>       <span class="s1">&#39;heart_rate&#39;</span><span class="p">:[],</span>
-                                           <span class="s1">&#39;timestamp&#39;</span><span class="p">:[]}</span>
-
+                                           <span class="s1">&#39;distance&#39;</span><span class="p">:[],</span>       <span class="s1">&#39;timestamp&#39;</span><span class="p">:[]}</span>
+        
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">fitfile</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="s2">&quot;record&quot;</span><span class="p">):</span>
-            <span class="c1"># by checking if len(record.fields)==10 the fucntion will pull out synchronous data</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="c1"># by checking if len(record.fields) &gt;= 8 the function will pull out data containing at least 8 parameters</span>
+            <span class="c1"># which may or may not match the parameters listed above.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
@@ -122,6 +123,12 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># check to see if list is empty</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                <span class="n">error_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Warning: Parameter </span><span class="si">{}</span><span class="s2"> was not populated with data.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">error_out</span><span class="p">)</span>
+                
     <span class="k">return</span> <span class="kc">None</span></div>
 </pre></div>
 

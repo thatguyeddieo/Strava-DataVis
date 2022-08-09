@@ -115,14 +115,26 @@
         <span class="n">activs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
 
     <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">activs</span><span class="p">:</span>
-        <span class="n">act_parms</span> <span class="o">=</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">a</span><span class="p">]</span>
 
-        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span>
-                          <span class="n">stop</span><span class="o">=</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                          <span class="n">step</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
+        <span class="c1"># Get data</span>
+        <span class="n">act_parms</span> <span class="o">=</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">a</span><span class="p">]</span>
+        <span class="n">x_data</span> <span class="o">=</span> <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">y_data</span> <span class="o">=</span> <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="c1"># Remove any empty data strings or None types        </span>
+        <span class="n">array_logical</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">array</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">array</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">combined_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">array_logical</span><span class="p">(</span><span class="n">x_data</span><span class="p">),</span><span class="n">array_logical</span><span class="p">(</span><span class="n">y_data</span><span class="p">))</span>
+
+        <span class="n">x_data_filtered</span> <span class="o">=</span> <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">combined_index</span><span class="p">]</span>
+        <span class="n">y_data_filtered</span> <span class="o">=</span> <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">combined_index</span><span class="p">]</span>
         
-        <span class="n">int_func</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-                                        <span class="n">act_parms</span><span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+        <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">x_data_filtered</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                          <span class="n">stop</span><span class="o">=</span><span class="n">x_data_filtered</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                          <span class="n">step</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
+
+        <span class="n">int_func</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x_data_filtered</span><span class="p">,</span>
+                                        <span class="n">y_data_filtered</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
 
         <span class="n">new_func</span> <span class="o">=</span> <span class="n">int_func</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
 
