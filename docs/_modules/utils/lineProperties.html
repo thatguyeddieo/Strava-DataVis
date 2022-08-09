@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>utils.lineProperties &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/corlab.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils.lineProperties</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for utils.lineProperties</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
+<span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="add_points"><a class="viewcode-back" href="../../utils.html#utils.lineProperties.add_points">[docs]</a><span class="k">def</span> <span class="nf">add_points</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span><span class="n">point</span><span class="p">,</span><span class="n">num_points</span><span class="p">,</span><span class="n">rgba</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    lc: LineCollection</span>
+<span class="sd">        </span>
+<span class="sd">    point: list, np.ndarray</span>
+<span class="sd">        Point to add to LineCollection lc</span>
+<span class="sd">        Must be a single point in the form [x,y]</span>
+
+<span class="sd">    num_points: int</span>
+<span class="sd">        Number of points to display. As more than num_points get</span>
+<span class="sd">        added to LineCollection lc, the function will display the </span>
+<span class="sd">        most recent num_points points</span>
+
+<span class="sd">    rgba: np.ndarray</span>
+<span class="sd">        Red, green, blue, alpha color matrix. Should be a 2D array</span>
+<span class="sd">        with shape (num_points,4). See get_colors() for more </span>
+<span class="sd">        information</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    None</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Function returns None but sets LineCollection lc&#39;s segments</span>
+<span class="sd">    and colors. The segments are added as a 3D array of size </span>
+<span class="sd">    (num_points,2,2). See the example below in Examples</span>
+
+<span class="sd">    lc&#39;s colors are set using the rgba parameter</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; line = LineCollection([])</span>
+<span class="sd">    &gt;&gt;&gt; n_points, tail_length = 10, (3/4.)*n_points</span>
+<span class="sd">    &gt;&gt;&gt; rgb_color = [0.0, 0.5, 1.0]</span>
+<span class="sd">    &gt;&gt;&gt; tip_color = [1.0, 0.0, 0.0]</span>
+<span class="sd">    &gt;&gt;&gt; rgba_color = lineProp.define_colors(n_points,tail_length,</span>
+<span class="sd">                                            rgb_color,tip_color)</span>
+<span class="sd">    &gt;&gt;&gt; for i in range(10):</span>
+<span class="sd">    &gt;&gt;&gt;     lineProp.add_points(line,[i,i],n_points,rgba_color) </span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;Line Segments: &quot;,line.get_segments())</span>
+<span class="sd">    Line Segments: </span>
+<span class="sd">    [array([[0., 0.], [0., 0.]]), </span>
+<span class="sd">     array([[0., 0.], [1., 1.]]), </span>
+<span class="sd">     array([[1., 1.], [2., 2.]]), </span>
+<span class="sd">     array([[2., 2.], [3., 3.]]), </span>
+<span class="sd">     array([[3., 3.], [4., 4.]]), </span>
+<span class="sd">     array([[4., 4.], [5., 5.]]), </span>
+<span class="sd">     array([[5., 5.], [6., 6.]]), </span>
+<span class="sd">     array([[6., 6.], [7., 7.]]), </span>
+<span class="sd">     array([[7., 7.], [8., 8.]]), </span>
+<span class="sd">     array([[8., 8.], [9., 9.]])]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span><span class="n">LineCollection</span><span class="p">):</span>
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;Pass parameter lc as LineCollection object</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;by using matplotlib.collections and LineCollection([]) &quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="c1"># Check to see if point contains only one pair</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;This function is meant to take only one point</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;User passed point as: </span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">pre_segments</span> <span class="o">=</span> <span class="n">lc</span><span class="o">.</span><span class="n">get_segments</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pre_segments</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">reshape_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">point</span><span class="p">,</span><span class="n">point</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">new_segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">reshape_points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> 
+                                       <span class="n">reshape_points</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pre_segments</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_points</span><span class="p">:</span>
+        <span class="n">new_segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pre_segments</span><span class="p">,</span>
+                                     <span class="p">[[</span><span class="n">pre_segments</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">point</span><span class="p">]]))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pre_segments</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                                     <span class="p">[[</span><span class="n">pre_segments</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">point</span><span class="p">]]))</span>
+    
+    <span class="k">if</span> <span class="n">new_segments</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">num_points</span><span class="p">:</span>
+        <span class="n">short_rgba</span> <span class="o">=</span> <span class="n">rgba</span><span class="p">[</span><span class="o">-</span><span class="n">new_segments</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span>
+        <span class="n">lc</span><span class="o">.</span><span class="n">set_segments</span><span class="p">(</span><span class="n">new_segments</span><span class="p">)</span>
+        <span class="n">lc</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">short_rgba</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="n">lc</span><span class="o">.</span><span class="n">set_segments</span><span class="p">(</span><span class="n">new_segments</span><span class="p">)</span>
+    <span class="n">lc</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">rgba</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="define_colors"><a class="viewcode-back" href="../../utils.html#utils.lineProperties.define_colors">[docs]</a><span class="k">def</span> <span class="nf">define_colors</span><span class="p">(</span><span class="n">num_points</span><span class="p">,</span><span class="n">tail_len</span><span class="p">,</span><span class="n">rgb</span><span class="p">,</span><span class="n">rgb_tip</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    num_points: int</span>
+<span class="sd">        Number of points to display. As more than num_points get</span>
+<span class="sd">        added to LineCollection lc, the function will display the </span>
+<span class="sd">        most recent num_points points</span>
+
+<span class="sd">    tail_len: float, int</span>
+<span class="sd">        The portion of segments to be considered as the tail. The</span>
+<span class="sd">        tail will be faded out by reducing their alpha values</span>
+
+<span class="sd">    rgb: list, np.ndarray</span>
+<span class="sd">        [Red, Green, Blue] color mapping to use for the line </span>
+
+<span class="sd">    rgb_tip: list, np.ndarray</span>
+<span class="sd">        [Red, Green, Blue] color mapping to use for the tip</span>
+<span class="sd">        The tip in this case is define as the first 5 points</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    rgba: </span>
+<span class="sd">        Red, green, blue, alpha color matrix. Returned as a 2D array</span>
+<span class="sd">        with shape (num_points,4). Where each row is a point. While the </span>
+<span class="sd">        first three columns represent the Red, Green, Blue (RGB) shades,</span>
+<span class="sd">        and the last column represents the alpha values associated with </span>
+<span class="sd">        each point. See example below</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; n_points, tail_length = 10, (3/4.)*n_points</span>
+<span class="sd">    &gt;&gt;&gt; rgb_color = [0.0, 0.5, 1.0]</span>
+<span class="sd">    &gt;&gt;&gt; tip_color = [1.0, 0.0, 0.0]</span>
+<span class="sd">    &gt;&gt;&gt; rgba_color = lineProp.define_colors(n_points,tail_length,</span>
+<span class="sd">                                            rgb_color,tip_color)</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;Rgba Matrix: &quot;,rgba_color)</span>
+<span class="sd">    &gt;&gt;&gt; alphas = rgba_color[:,3]</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;Alphas: : &quot;,alphas)</span>
+<span class="sd">    RGBA Matrix: </span>
+<span class="sd">    [[0.         0.5        1.         0.14285714]</span>
+<span class="sd">     [0.         0.5        1.         0.28571429]</span>
+<span class="sd">     [0.         0.5        1.         0.42857143]</span>
+<span class="sd">     [0.         0.5        1.         0.57142857]</span>
+<span class="sd">     [0.         0.5        1.         0.71428571]</span>
+<span class="sd">     [1.         0.         0.         0.85714286]</span>
+<span class="sd">     [1.         0.         0.         1.        ]</span>
+<span class="sd">     [1.         0.         0.         1.        ]</span>
+<span class="sd">     [1.         0.         0.         1.        ]</span>
+<span class="sd">     [1.         0.         0.         1.        ]]</span>
+<span class="sd">    Alphas: : </span>
+<span class="sd">    [0.14285714 0.28571429 0.42857143 0.57142857 0.71428571 0.85714286</span>
+<span class="sd">    1.         1.         1.         1.        ]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tail_len</span><span class="p">,</span><span class="nb">float</span><span class="p">):</span>
+        <span class="n">tail_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tail_len</span><span class="p">)</span>
+
+    <span class="n">rgba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_points</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">rgba</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">,:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">rgb</span>
+    <span class="n">rgba</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:,:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">rgb_tip</span>
+
+    <span class="c1"># set alphas to tail and head</span>
+    <span class="n">tail</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">tail_len</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">tail_len</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_points</span><span class="o">-</span><span class="n">tail_len</span><span class="p">)</span>
+    <span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">tail</span><span class="p">,</span><span class="n">head</span><span class="p">))</span>
+
+    <span class="n">rgba</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">alphas</span>
+
+    <span class="k">return</span> <span class="n">rgba</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils.lineProperties</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

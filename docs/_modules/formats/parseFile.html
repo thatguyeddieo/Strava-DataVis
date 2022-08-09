@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formats.parseFile &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/corlab.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">formats.parseFile</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for formats.parseFile</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">fitparse</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../formats.html#formats.parseFile.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">loc_data</span><span class="p">,</span><span class="n">fn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    loc_data: dict</span>
+<span class="sd">        GPS data structure in the form defined by the formats package docstring</span>
+<span class="sd">        Only containing the first set of &#39;activities&#39; and &#39;units&#39; keys</span>
+<span class="sd">        </span>
+<span class="sd">    fn: str</span>
+<span class="sd">        Gzip file name containing compressed .fit file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    This function will add to loc_data[&#39;activities&#39;] by including the .fit</span>
+<span class="sd">    file&#39;s parameters and values. In the same format as defined in the </span>
+<span class="sd">    formats package docstring.</span>
+
+<span class="sd">    {&#39;activities&#39;: {&#39;Act_1&#39;: {&#39;Param_1&#39;: np.array([]), &#39;Param_2&#39;: np.array([]), ...}, </span>
+<span class="sd">                    {&#39;Act_2&#39;: {&#39;Param_1&#39;: np.array([]), &#39;Param_2&#39;: np.array([]), ...},</span>
+<span class="sd">                    ...}</span>
+
+<span class="sd">    The list of parameters to parse include:</span>
+<span class="sd">        * altitude</span>
+<span class="sd">        * enhanced_altitude</span>
+<span class="sd">        * position_lat</span>
+<span class="sd">        * position_long</span>
+<span class="sd">        * speed</span>
+<span class="sd">        * enhanced_speed</span>
+<span class="sd">        * distance</span>
+<span class="sd">        * heart_rate</span>
+<span class="sd">        * timestamp</span>
+<span class="sd">                </span>
+<span class="sd">        Note to developers:</span>
+<span class="sd">        Make more robust by checing if file is gzip or fit.</span>
+<span class="sd">        Check to see if dictionary was already created which contains</span>
+<span class="sd">        activity and unit keys</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">]</span>
+
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">ex_str_out</span> <span class="o">=</span> <span class="s2">&quot;Key &#39;activities&#39; does not exist in dictionary</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                     <span class="s2">&quot;passed. Create a data structure as defined in</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                     <span class="s2">&quot;format.format.create_datastr()</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ex_str_out</span><span class="p">)</span>
+        <span class="k">return</span> 
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parsing &quot;</span> <span class="o">+</span> <span class="n">fn</span> <span class="o">+</span><span class="s2">&quot;...&quot;</span><span class="p">)</span> 
+
+    <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">as</span> <span class="n">n</span><span class="p">:</span>
+        <span class="c1"># split filename from directory </span>
+        <span class="n">f_split</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        
+        <span class="n">fit_key</span> <span class="o">=</span> <span class="n">f_split</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span>
+        <span class="n">fitfile</span> <span class="o">=</span> <span class="n">fitparse</span><span class="o">.</span><span class="n">FitFile</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># Default parameters to track</span>
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;altitude&#39;</span><span class="p">:[],</span>       <span class="s1">&#39;enhanced_altitude&#39;</span><span class="p">:[],</span>
+                                           <span class="s1">&#39;position_lat&#39;</span><span class="p">:</span> <span class="p">[],</span>  <span class="s1">&#39;position_long&#39;</span><span class="p">:[],</span>
+                                           <span class="s1">&#39;speed&#39;</span><span class="p">:[],</span>          <span class="s1">&#39;enhanced_speed&#39;</span><span class="p">:[],</span>
+                                           <span class="s1">&#39;distance&#39;</span><span class="p">:[],</span>       <span class="s1">&#39;timestamp&#39;</span><span class="p">:[]}</span>
+        
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">fitfile</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="s2">&quot;record&quot;</span><span class="p">):</span>
+            <span class="c1"># by checking if len(record.fields) &gt;= 8 the function will pull out data containing at least 8 parameters</span>
+            <span class="c1"># which may or may not match the parameters listed above.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span>
+                            <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># check to see if list is empty</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">fit_key</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                <span class="n">error_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Warning: Parameter </span><span class="si">{}</span><span class="s2"> was not populated with data.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">error_out</span><span class="p">)</span>
+                
+    <span class="k">return</span> <span class="kc">None</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">formats.parseFile</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

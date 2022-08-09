@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formats package &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/corlab.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utils package" href="utils.html" />
+    <link rel="prev" title="calcs package" href="calcs.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="utils package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="calcs.html" title="calcs package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">formats package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="formats-package">
+<h1>formats package<a class="headerlink" href="#formats-package" title="Permalink to this headline">¶</a></h1>
+<p>Text here</p>
+<div class="section" id="module-formats.formats">
+<span id="formats-formats-module"></span><h2>formats.formats module<a class="headerlink" href="#module-formats.formats" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<dl class="py function">
+<dt id="formats.formats.create_datastruct">
+<code class="sig-prename descclassname">formats.formats.</code><code class="sig-name descname">create_datastruct</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">include_units</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/formats/formats.html#create_datastruct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#formats.formats.create_datastruct" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>include_units</strong> (<em>boolean</em>) – By default set to True. This will include a units keys to the GPS
+data structure containing parameter and unit pairs</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Returns a GPS data structure in the form of nested dictionaries
+Where the first set of key contain ‘activities’ and ‘units’ keys</p>
+<p>The ‘activities’ dictionary contains a dictionary where it is
+expected that key values pairs will be added in the following format</p>
+<dl class="simple">
+<dt>{‘activities’: {‘Act_1’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},</dt><dd><p>{‘Act_2’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},
+…}</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>List of parameters units to add include:</dt><dd><ul class="simple">
+<li><p>altitude</p></li>
+<li><p>enhanced_altitude</p></li>
+<li><p>position_lat</p></li>
+<li><p>position_long</p></li>
+<li><p>speed</p></li>
+<li><p>enhanced_speed</p></li>
+<li><p>distance</p></li>
+<li><p>heart_rate</p></li>
+<li><p>timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="formats.formats.read_xlsx">
+<code class="sig-prename descclassname">formats.formats.</code><code class="sig-name descname">read_xlsx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_dir</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">activities</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/formats/formats.html#read_xlsx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#formats.formats.read_xlsx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_dir</strong> (<em>str</em>) – Directory name to read
+The directory must be present in the current working directory</p></li>
+<li><p><strong>fname</strong> (<em>str</em>) – Specific excel file to read
+Following the write_xlsx() fuction, the default will be to read
+both the ‘activites’ and ‘units’ files</p></li>
+<li><p><strong>activities</strong> (<em>list</em>) – List of desired parameter names to read as strings
+If None, all parameters will be read</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Returns a GPS data structure in the form of nested dictionaries
+Where the first set of keys contain ‘activities’ and ‘units’ keys,
+unless if stated differently by fname.</p>
+<p>The ‘activities’ dictionary contains a dictionary containing the
+parameter names as keys and parameter data as values in the form of
+numpy arrays</p>
+<dl class="simple">
+<dt>{‘activities’: {‘Act_1’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},</dt><dd><p>{‘Act_2’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},
+…}</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="formats.formats.write_xlsx">
+<code class="sig-prename descclassname">formats.formats.</code><code class="sig-name descname">write_xlsx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loc_data</span></em>, <em class="sig-param"><span class="n">new_dir</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/formats/formats.html#write_xlsx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#formats.formats.write_xlsx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loc_data</strong> (<em>dict</em>) – <p>GPS data structure in the form defined by the formats package docstring
+Dict of activities, their parameters and values:
+loc_data: {‘Activities’: {‘Act_1’: {‘Speed’: np.array([1,2,3… ]), … }</p>
+<blockquote>
+<div><blockquote>
+<div><p>’Act_2’: {‘Speed’: np.array([1,2,3… ]), … }
+…}</p>
+</div></blockquote>
+<p>’Units’: …}</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>new_dir</strong> (<em>str</em>) – Directory name to create, ensure it does not already exists
+This function only works in the current working directory</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-formats.parseFile">
+<span id="formats-parsefile-module"></span><h2>formats.parseFile module<a class="headerlink" href="#module-formats.parseFile" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<dl class="py function">
+<dt id="formats.parseFile.parse">
+<code class="sig-prename descclassname">formats.parseFile.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">loc_data</span></em>, <em class="sig-param"><span class="n">fn</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/formats/parseFile.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#formats.parseFile.parse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loc_data</strong> (<em>dict</em>) – GPS data structure in the form defined by the formats package docstring
+Only containing the first set of ‘activities’ and ‘units’ keys</p></li>
+<li><p><strong>fn</strong> (<em>str</em>) – Gzip file name containing compressed .fit file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function will add to loc_data[‘activities’] by including the .fit
+file’s parameters and values. In the same format as defined in the
+formats package docstring.</p>
+<dl>
+<dt>{‘activities’: {‘Act_1’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},</dt><dd><p>{‘Act_2’: {‘Param_1’: np.array([]), ‘Param_2’: np.array([]), …},
+…}</p>
+</dd>
+<dt>The list of parameters to parse include:</dt><dd><ul class="simple">
+<li><p>altitude</p></li>
+<li><p>enhanced_altitude</p></li>
+<li><p>position_lat</p></li>
+<li><p>position_long</p></li>
+<li><p>speed</p></li>
+<li><p>enhanced_speed</p></li>
+<li><p>distance</p></li>
+<li><p>heart_rate</p></li>
+<li><p>timestamp</p></li>
+</ul>
+<p>Note to developers:
+Make more robust by checing if file is gzip or fit.
+Check to see if dictionary was already created which contains
+activity and unit keys</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">formats package</a><ul>
+<li><a class="reference internal" href="#module-formats.formats">formats.formats module</a></li>
+<li><a class="reference internal" href="#module-formats.parseFile">formats.parseFile module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="calcs.html"
+                        title="previous chapter">calcs package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utils.html"
+                        title="next chapter">utils package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/formats.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="utils package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="calcs.html" title="calcs package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">formats package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

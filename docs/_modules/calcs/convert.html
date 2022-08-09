@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>calcs.convert &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/corlab.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">calcs.convert</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for calcs.convert</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="units"><a class="viewcode-back" href="../../calcs.html#calcs.convert.units">[docs]</a><span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="n">c_type</span><span class="p">,</span><span class="n">vals</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    c_type: str</span>
+<span class="sd">        String containing conversion type</span>
+<span class="sd">        See unit_type.keys() for available conversions. If a non valid</span>
+<span class="sd">        conversion type is passed this function will return an error message</span>
+<span class="sd">        and None</span>
+
+<span class="sd">    vals: np.ndarray, float, int, list</span>
+<span class="sd">        Data to convert</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    np.ndarray, float, int</span>
+<span class="sd">        Returns new converted data in the same data type as what was</span>
+<span class="sd">        passed in vals</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; x = np.arange(0,2*np.pi,np.pi/4)</span>
+<span class="sd">    &gt;&gt;&gt; x = convert.units(&#39;rad_to_deg&#39;,x)</span>
+<span class="sd">    &gt;&gt;&gt; print(x)</span>
+<span class="sd">    [  0.  45.  90. 135. 180. 225. 270. 315.]</span>
+
+
+<span class="sd">    &gt;&gt;&gt; center = [-122.338024,47.677978] # [long, lat] degrees</span>
+<span class="sd">    &gt;&gt;&gt; center_semi = convert.units(&#39;deg_to_semi&#39;,center)</span>
+<span class="sd">    &gt;&gt;&gt; print(center_semi, &#39;semicircle units&#39;)</span>
+<span class="sd">    [-1.45954948e+09  5.68820434e+08] semicircle units</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">unit_type</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;deg_to_semi&#39;</span><span class="p">:</span>     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">)</span><span class="o">/</span><span class="mi">180</span><span class="p">,</span>
+                 <span class="s1">&#39;semi_to_deg&#39;</span><span class="p">:</span>     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">),</span>
+                 <span class="s1">&#39;deg_to_rad&#39;</span><span class="p">:</span>      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">),</span>
+                 <span class="s1">&#39;rad_to_deg&#39;</span><span class="p">:</span>      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">/</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)}</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vals</span><span class="p">,(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">,</span><span class="nb">list</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">c_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unit_type</span><span class="p">:</span>
+            <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> not a valid conversion type</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                      <span class="s2">&quot;See calcs.convert.units() for available conversions&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c_type</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">convert_result</span> <span class="o">=</span> <span class="n">unit_type</span><span class="p">[</span><span class="n">c_type</span><span class="p">](</span><span class="n">vals</span><span class="p">)</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;Check values passed, function units() takes either</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;list, float value or floats within a numpy array.&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">convert_result</span></div>
+    
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">calcs.convert</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>

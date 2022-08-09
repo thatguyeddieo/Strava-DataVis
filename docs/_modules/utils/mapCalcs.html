@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>utils.mapCalcs &#8212; Strava-DataVis 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/corlab.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils.mapCalcs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for utils.mapCalcs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">calcs</span> <span class="kn">import</span> <span class="n">convert</span>
+<span class="sd">&quot;&quot;&quot; ---------------------------------------------------------------------- &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_center"><a class="viewcode-back" href="../../utils.html#utils.mapCalcs.get_center">[docs]</a><span class="k">def</span> <span class="nf">get_center</span><span class="p">(</span><span class="n">loc_data</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">coord_keys</span><span class="p">,</span><span class="n">conversion</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    loc_data: dict</span>
+<span class="sd">        GPS data structure in the form defined by the formats package docstring</span>
+<span class="sd">        Dict of activities, their parameters and values:</span>
+<span class="sd">        loc_data: {&#39;Activities&#39;: {&#39;Act_1&#39;: {&#39;Speed&#39;: np.array([1,2,3... ]), ... } </span>
+<span class="sd">                                  &#39;Act_2&#39;: {&#39;Speed&#39;: np.array([1,2,3... ]), ... }</span>
+<span class="sd">                                  ...} </span>
+<span class="sd">                    &#39;Units&#39;: ...}</span>
+
+<span class="sd">    coord: int or range</span>
+<span class="sd">        Coordinates to index </span>
+
+<span class="sd">    coord_keys: list</span>
+<span class="sd">        Coordinate parameter names as strings</span>
+<span class="sd">        where longitude is the first string and latitude is the second</span>
+
+<span class="sd">    conversion: None, str</span>
+<span class="sd">        By default set to None, user can provide conversion string to use</span>
+<span class="sd">        in accordance with module calcs.convert.units() and its available</span>
+<span class="sd">        conversion types</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    center_coords: ndarray or list</span>
+<span class="sd">        Returns calculated center coordinates as shown below:</span>
+<span class="sd">        [long_center_coord,lat_center_coord]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># check to see if keys exists in data strcutures</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">acts</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">acts</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">][</span><span class="n">acts</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">str_out</span> <span class="o">=</span> <span class="s2">&quot;One key in pair </span><span class="si">{}</span><span class="s2"> does not exists in data structure.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>\
+                  <span class="s2">&quot;Exiting get_center() function and returning [nan,nan] coordinates</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">str_out</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coord_keys</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="nb">range</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+        <span class="n">strt</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">strt</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span>
+        <span class="n">strt</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">coord</span><span class="p">,</span> <span class="n">coord</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">strt</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error Message&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">act_parms</span> <span class="o">=</span> <span class="n">loc_data</span><span class="p">[</span><span class="s1">&#39;activities&#39;</span><span class="p">]</span>
+    <span class="n">coords_array0</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">coords</span><span class="p">])</span>
+                     <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">act_parms</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                     <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]])]</span>
+    <span class="n">coords_array1</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">coords</span><span class="p">])</span>
+                     <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">act_parms</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                     <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">act_parms</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">coord_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">]])]</span>
+
+    <span class="n">center_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="nb">sum</span><span class="p">(</span><span class="n">coords_array0</span><span class="p">,[]),</span><span class="nb">sum</span><span class="p">(</span><span class="n">coords_array1</span><span class="p">,[])],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conversion</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span> 
+        <span class="k">return</span> <span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="n">conversion</span><span class="p">,</span><span class="n">center_coords</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">center_coords</span></div>
+    
+<div class="viewcode-block" id="get_corners"><a class="viewcode-back" href="../../utils.html#utils.mapCalcs.get_corners">[docs]</a><span class="k">def</span> <span class="nf">get_corners</span><span class="p">(</span><span class="n">zoom</span><span class="p">,</span><span class="n">center</span><span class="p">,</span><span class="n">widxhght</span><span class="p">,</span><span class="n">in_coord_units</span><span class="o">=</span><span class="s1">&#39;degrees&#39;</span><span class="p">,</span><span class="n">out_coord_units</span><span class="o">=</span><span class="s1">&#39;degrees&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    zoom: int</span>
+<span class="sd">        Zoom level of the region desired</span>
+
+<span class="sd">    center: list, or ndarray</span>
+<span class="sd">        center coordinates in list or numpy array form</span>
+<span class="sd">        [long_coord, lat_coord] </span>
+<span class="sd">    </span>
+<span class="sd">    widxhght: list or ndarray</span>
+<span class="sd">        Defines the rectangular dimensions of the map. The parameter </span>
+<span class="sd">        takes a list of integers where the first value is the width </span>
+<span class="sd">        size and second is the height size</span>
+
+<span class="sd">    in_coord_units: str</span>
+<span class="sd">        This function calculates the corners by initizaling the center</span>
+<span class="sd">        in degree units if non degree units are passed. The function </span>
+<span class="sd">        will use the in_coord_units string value to convert the data </span>
+<span class="sd">        from what is passed to degrees then perform the calculations. </span>
+<span class="sd">        Available options include:</span>
+<span class="sd">            * &#39;semi&#39;</span>
+
+<span class="sd">    out_coord_units: str</span>
+<span class="sd">        By default set to degrees, user can provide conversion string </span>
+<span class="sd">        to use in accordance with module calcs.convert.units() and </span>
+<span class="sd">        its available conversion types.</span>
+<span class="sd">            * &#39;semi&#39;</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Tuple containing the corners in the following order</span>
+<span class="sd">        (n_lim, e_lim, s_lim, w_lim)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    Throughout this function x refers to longitude coordinates and</span>
+<span class="sd">    y refers to latitude coordinates.</span>
+
+<span class="sd">    The following constants are used to perform calculations</span>
+<span class="sd">      * mercator length:            256</span>
+<span class="sd">      * pixels per long degree:    (256/360)</span>
+<span class="sd">      * pixels per lonng radian:   (256/(2*math.pi))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">in_coord_units</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;semi&#39;</span><span class="p">:</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="s1">&#39;semi_to_deg&#39;</span><span class="p">,</span><span class="n">center</span><span class="p">)</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">zoom</span>
+
+    <span class="n">center_pxs</span> <span class="o">=</span> <span class="n">get_center_pxs</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+
+    <span class="n">w_lim</span><span class="p">,</span><span class="n">s_lim</span> <span class="o">=</span> <span class="n">get_SW_point</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span><span class="n">center_pxs</span><span class="p">,</span><span class="n">widxhght</span><span class="p">)</span>
+    <span class="n">e_lim</span><span class="p">,</span><span class="n">n_lim</span> <span class="o">=</span> <span class="n">get_NE_point</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span><span class="n">center_pxs</span><span class="p">,</span><span class="n">widxhght</span><span class="p">)</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_lim</span><span class="p">,</span><span class="n">e_lim</span><span class="p">,</span><span class="n">s_lim</span><span class="p">,</span><span class="n">w_lim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">out_coord_units</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;semi&#39;</span><span class="p">:</span> 
+        <span class="n">corners</span> <span class="o">=</span> <span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="s1">&#39;deg_to_semi&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n_lim</span><span class="p">,</span> <span class="n">e_lim</span><span class="p">,</span> 
+                                                        <span class="n">s_lim</span><span class="p">,</span> <span class="n">w_lim</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">corners</span>
+
+    <span class="k">return</span> <span class="n">corners</span></div>
+
+<div class="viewcode-block" id="get_center_pxs"><a class="viewcode-back" href="../../utils.html#utils.mapCalcs.get_center_pxs">[docs]</a><span class="k">def</span> <span class="nf">get_center_pxs</span><span class="p">(</span><span class="n">center</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    center: list or ndarray</span>
+<span class="sd">        Center coordinates in list or numpy array form</span>
+<span class="sd">        [long_coord, lat_coord] </span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    point_x, point_y: float</span>
+<span class="sd">        Center longitude and latitude coordinates in pixels</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mercator_len</span> <span class="o">=</span> <span class="mi">256</span> 
+    <span class="n">mercator_origin_x</span><span class="p">,</span> <span class="n">mercator_origin_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">mercator_len</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> 
+
+    <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span> <span class="o">=</span> <span class="n">center</span> <span class="c1"># unpack coords</span>
+
+    <span class="n">point_x</span> <span class="o">=</span> <span class="n">mercator_origin_x</span><span class="o">+</span><span class="n">center_x</span><span class="o">*</span><span class="p">(</span><span class="mi">256</span><span class="o">/</span><span class="mi">360</span><span class="p">)</span>
+
+    <span class="n">siny</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="s1">&#39;deg_to_rad&#39;</span><span class="p">,</span><span class="n">center_y</span><span class="p">))</span>
+    <span class="n">siny</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">siny</span><span class="p">,</span><span class="o">-</span><span class="mf">0.9999</span><span class="p">)</span> 
+    <span class="n">siny</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">siny</span><span class="p">,</span> <span class="mf">0.9999</span><span class="p">)</span> 
+    <span class="n">point_y</span> <span class="o">=</span> <span class="n">mercator_origin_y</span><span class="o">+</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="n">siny</span><span class="p">)</span> <span class="o">/</span> 
+              <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">siny</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">256</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+   
+    <span class="k">return</span> <span class="n">point_x</span><span class="p">,</span> <span class="n">point_y</span></div>
+
+<div class="viewcode-block" id="get_SW_point"><a class="viewcode-back" href="../../utils.html#utils.mapCalcs.get_SW_point">[docs]</a><span class="k">def</span> <span class="nf">get_SW_point</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span><span class="n">center_pxs</span><span class="p">,</span><span class="n">widxhght</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    scale: float</span>
+<span class="sd">        Map scale based on zoom level</span>
+
+<span class="sd">    center_pxs: list or ndarray</span>
+<span class="sd">        Center pixel coordinates in list or numpy array form</span>
+<span class="sd">        [long_coord, lat_coord] </span>
+<span class="sd">    </span>
+<span class="sd">    widxhght: list or ndarray</span>
+<span class="sd">        Defines the rectangular dimensions of the map. The parameter </span>
+<span class="sd">        takes a list of integers where the first value is the width </span>
+<span class="sd">        size and second is the height size</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    sw_lng, sw_lat: float</span>
+<span class="sd">        Southwest corner coordinates in degrees</span>
+<span class="sd">        [sw_long_coord, sw_lat_coord]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    Using the southwest coordinates, the west and south map boundaries</span>
+<span class="sd">    are known </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mercator_len</span> <span class="o">=</span> <span class="mi">256</span> 
+    <span class="n">mercator_origin_x</span><span class="p">,</span> <span class="n">mercator_origin_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">mercator_len</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span>
+
+    <span class="n">wid</span><span class="p">,</span> <span class="n">hght</span> <span class="o">=</span> <span class="n">widxhght</span>
+
+    <span class="n">center_px_x</span><span class="p">,</span> <span class="n">center_px_y</span> <span class="o">=</span> <span class="n">center_pxs</span>
+    <span class="n">sw_x</span><span class="p">,</span> <span class="n">sw_y</span> <span class="o">=</span> <span class="p">(</span> <span class="n">center_px_x</span><span class="o">-</span><span class="p">(</span><span class="n">wid</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">scale</span><span class="p">,</span> <span class="n">center_px_y</span><span class="o">+</span><span class="p">(</span><span class="n">hght</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">scale</span><span class="p">)</span>
+
+    <span class="n">sw_lng</span> <span class="o">=</span> <span class="p">(</span><span class="n">sw_x</span><span class="o">-</span><span class="n">mercator_origin_x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">256</span><span class="o">/</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">sw_lat_rads</span> <span class="o">=</span> <span class="p">(</span><span class="n">sw_y</span><span class="o">-</span><span class="n">mercator_origin_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="p">((</span><span class="mi">256</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))))</span> 
+    <span class="n">sw_lat</span> <span class="o">=</span> <span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="s1">&#39;rad_to_deg&#39;</span><span class="p">,</span>
+                <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">atan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sw_lat_rads</span><span class="p">))</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> 
+
+    <span class="k">return</span> <span class="n">sw_lng</span><span class="p">,</span><span class="n">sw_lat</span></div>
+
+<div class="viewcode-block" id="get_NE_point"><a class="viewcode-back" href="../../utils.html#utils.mapCalcs.get_NE_point">[docs]</a><span class="k">def</span> <span class="nf">get_NE_point</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span><span class="n">center_pxs</span><span class="p">,</span><span class="n">widxhght</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    scale: float</span>
+<span class="sd">        Map scale based on zoom level</span>
+
+<span class="sd">    center_pxs: list or ndarray</span>
+<span class="sd">        Center pixel coordinates in list or numpy array form</span>
+<span class="sd">        [long_coord, lat_coord] </span>
+<span class="sd">    </span>
+<span class="sd">    widxhght: list or ndarray</span>
+<span class="sd">        Defines the rectangular dimensions of the map. The parameter </span>
+<span class="sd">        takes a list of integers where the first value is the width </span>
+<span class="sd">        size and second is the height size</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    ne_lng, ne_lat: float</span>
+<span class="sd">        Northeast corner coordinates in degrees</span>
+<span class="sd">        [ne_long_coord, ne_lat_coord]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    ------</span>
+<span class="sd">    Using the northeast coordinates, the north and east map boundaries</span>
+<span class="sd">    are known </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mercator_len</span> <span class="o">=</span> <span class="mi">256</span> 
+    <span class="n">mercator_origin_x</span><span class="p">,</span> <span class="n">mercator_origin_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">mercator_len</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> 
+
+    <span class="n">wid</span><span class="p">,</span> <span class="n">hght</span> <span class="o">=</span> <span class="n">widxhght</span> 
+    <span class="n">center_px_x</span><span class="p">,</span> <span class="n">center_px_y</span> <span class="o">=</span> <span class="n">center_pxs</span> 
+
+    <span class="n">ne_x</span><span class="p">,</span> <span class="n">ne_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">center_px_x</span><span class="o">+</span><span class="p">(</span><span class="n">wid</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">scale</span><span class="p">,</span> <span class="n">center_px_y</span><span class="o">-</span><span class="p">(</span><span class="n">hght</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">scale</span><span class="p">)</span>
+
+    <span class="n">ne_lng</span> <span class="o">=</span> <span class="p">(</span><span class="n">ne_x</span><span class="o">-</span><span class="n">mercator_origin_x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">256</span><span class="o">/</span><span class="mi">360</span><span class="p">)</span> 
+    <span class="n">ne_lat_rads</span> <span class="o">=</span> <span class="p">(</span><span class="n">ne_y</span><span class="o">-</span><span class="n">mercator_origin_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="p">((</span><span class="mi">256</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))))</span> 
+    <span class="n">ne_lat</span> <span class="o">=</span> <span class="n">convert</span><span class="o">.</span><span class="n">units</span><span class="p">(</span><span class="s1">&#39;rad_to_deg&#39;</span><span class="p">,</span>
+                <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">atan</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ne_lat_rads</span><span class="p">))</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">ne_lng</span><span class="p">,</span><span class="n">ne_lat</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Strava-DataVis 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils.mapCalcs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Eduardo Ocampo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+    </div>
+  </body>
+</html>
